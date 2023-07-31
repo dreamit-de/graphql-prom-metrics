@@ -30,7 +30,7 @@
   "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
   "devDependencies": {
     "@dreamit/graphql-server": "4.2.6",
-    "@sgohlke/ts-base-dependencies": "1.0.16",
+    "@sgohlke/ts-base-dependencies": "1.0.17",
     "@types/express": "4.17.17",
     "cross-fetch": "4.0.0",
     "express": "4.18.2",
