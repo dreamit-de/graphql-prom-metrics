@@ -1,6 +1,3 @@
-import bodyParser from 'body-parser'
-import express, {Express} from 'express'
-import {Server} from 'node:http'
 import {
     createLogEntry,
     GraphQLServer,
@@ -20,7 +17,6 @@ import {
     VALIDATION_ERROR,
     MetricsClient,
 } from '@dreamit/graphql-server-base'
-import fetch from 'cross-fetch'
 import {Console} from 'node:console'
 
 import {
@@ -113,20 +109,7 @@ const userSchemaResolvers= {
     }
 }
 
-const GRAPHQL_SERVER_PORT = 3000
 const LOGGER = new NoStacktraceJsonLogger('nostack-logger', 'myTestService', false)
-
-function fetchResponse(body: BodyInit,
-    method = 'POST',
-    // eslint-disable-next-line unicorn/no-object-as-default-parameter
-    headers: HeadersInit = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json'
-    }): Promise<Response> {
-    return fetch(`http://localhost:${GRAPHQL_SERVER_PORT}/graphql`,
-        {method: method, body: body, headers: headers})
-}
-
 
 interface User {
     userId: string
@@ -145,22 +128,11 @@ const userTwo: User = {userId: '2', userName:'UserTwo'}
 const usersQuery = 'query users{ users { userId userName } }'
 const returnErrorQuery = 'query returnError{ returnError { userId } }'
 
-let customGraphQLServer: GraphQLServer
-let graphQLServer: Server
-let metricsResponseBody: string
+const metricsClient =  new PromMetricsClient()
+const customGraphQLServer = new GraphQLServer(getInitialGraphQLServerOptions(metricsClient))
+let metricsData: string
 
-beforeAll(() => {
-    graphQLServer = setupGraphQLServer().listen({port: GRAPHQL_SERVER_PORT})
-    console.info(`Starting GraphQL server on port ${GRAPHQL_SERVER_PORT}`)
-})
-
-afterAll(() => {
-    graphQLServer.close()
-})
-
-test('Should get correct metrics for DefaultMetricsClient', async() => {
-    const metricsClient =  new PromMetricsClient()
-    customGraphQLServer.setMetricsClient(metricsClient)
+test('Should get correct metrics for PromMetricsClient', async() => {    
     await testInitialMetrics()
     await testInvalidSchemaMetrics(metricsClient)
     await testValidResponseMetrics()
@@ -175,35 +147,38 @@ test('Should get correct metrics for DefaultMetricsClient', async() => {
  * of the counters and gauges should be 0
  */
 async function testInitialMetrics(): Promise<void> {
-    metricsResponseBody = await getMetricsResponse()
-    expect(metricsResponseBody).toContain(
+    const contentType = customGraphQLServer.getMetricsContentType()
+    expect(contentType).toContain('text/plain')
+    expect(contentType).toContain('charset=utf-8')
+    metricsData = await getMetricsData()
+    expect(metricsData).toContain(
         'graphql_server_availability 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 0'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
 }
@@ -222,37 +197,37 @@ async function testInvalidSchemaMetrics(metricsClient: MetricsClient): Promise<v
         metricsClient: metricsClient,
         shouldUpdateSchemaFunction: () => true
     })
-    metricsResponseBody = await getMetricsResponse()
+    metricsData = await getMetricsData()
 
 
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_availability 0'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 0'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
     
@@ -266,38 +241,39 @@ async function testInvalidSchemaMetrics(metricsClient: MetricsClient): Promise<v
  * request_throughput should increase to 1.
  */
 async function testValidResponseMetrics(): Promise<void> {
+    await customGraphQLServer.handleRequest(
+        { query: usersQuery }
+    )
+    metricsData = await getMetricsData()
 
-    await fetchResponse(`{"query":"${usersQuery}"}`)
-    metricsResponseBody = await getMetricsResponse()
-
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_availability 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
 }
@@ -308,37 +284,37 @@ async function testValidResponseMetrics(): Promise<void> {
  * GraphQLError counter and request throughput should increase by 1
  */
 async function testErrorResponseMetrics(): Promise<void> {
-    await fetchResponse(`{"query":"${returnErrorQuery}"}`)
-    metricsResponseBody = await getMetricsResponse()
+    await customGraphQLServer.handleRequest({ query: returnErrorQuery })
+    metricsData = await getMetricsData()
 
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_availability 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 2'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
 }
@@ -349,40 +325,45 @@ async function testErrorResponseMetrics(): Promise<void> {
  * GraphQLError counter and request throughput should increase by 1
  */
 async function testEmptyContentResponseMetrics(): Promise<void> {
-    await fetchResponse('{"query":"unknown"}', 'POST', {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': ''
+    await customGraphQLServer.handleRequest({ 
+        query: returnErrorQuery,
+        method: 'POST',
+        headers: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            'Content-Type': ''
+        }    
     })
-    metricsResponseBody = await getMetricsResponse()
 
-    expect(metricsResponseBody).toContain(
+    metricsData = await getMetricsData()
+
+    expect(metricsData).toContain(
         'graphql_server_availability 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 3'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 2`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
 }
@@ -393,7 +374,6 @@ async function testEmptyContentResponseMetrics(): Promise<void> {
  * FetchError counter and request throughput should increase by 1
  */
 async function testFetchErrorResponseMetrics(metricsClient: MetricsClient): Promise<void> {
-
     customGraphQLServer.setOptions({
         schema: userSchema,
         rootValue: userSchemaResolvers,
@@ -405,54 +385,40 @@ async function testFetchErrorResponseMetrics(metricsClient: MetricsClient): Prom
         }
     })
 
-    await fetchResponse(`{"query":"${usersQuery}"}`)
-    metricsResponseBody = await getMetricsResponse()
+    await customGraphQLServer.handleRequest({ query: usersQuery })
+    metricsData = await getMetricsData()
     
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_availability 1'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         'graphql_server_request_throughput 4'
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${GRAPHQL_ERROR}"} 2`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SCHEMA_VALIDATION_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${FETCH_ERROR}"} 1`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${METHOD_NOT_ALLOWED_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${INVALID_SCHEMA_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${MISSING_QUERY_PARAMETER_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${VALIDATION_ERROR}"} 0`
     )
-    expect(metricsResponseBody).toContain(
+    expect(metricsData).toContain(
         `graphql_server_errors{errorClass="${SYNTAX_ERROR}"} 0`
     )
     customGraphQLServer.setOptions(getInitialGraphQLServerOptions(metricsClient))
-}
-
-function setupGraphQLServer(): Express {
-    const graphQLServerExpress = express()
-    customGraphQLServer = new GraphQLServer(getInitialGraphQLServerOptions(new PromMetricsClient()))
-    graphQLServerExpress.use(bodyParser.json())
-    graphQLServerExpress.all('/graphql', (request, response) => {
-        return customGraphQLServer.handleRequest(request, response)
-    })
-    graphQLServerExpress.get('/metrics', async(_request, response) => {
-        return response.contentType(customGraphQLServer.getMetricsContentType())
-        .send(await customGraphQLServer.getMetrics())
-    })
-    return graphQLServerExpress
 }
 
 function getInitialGraphQLServerOptions(metricsClient: MetricsClient): GraphQLServerOptions {
@@ -465,7 +431,6 @@ function getInitialGraphQLServerOptions(metricsClient: MetricsClient): GraphQLSe
     }
 }
 
-async function getMetricsResponse(): Promise<string> {
-    const metricsResponse = await fetch(`http://localhost:${GRAPHQL_SERVER_PORT}/metrics`)
-    return await metricsResponse.text()
+async function getMetricsData(): Promise<string> {
+    return await customGraphQLServer.getMetrics()
 }
