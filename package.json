@@ -28,10 +28,20 @@
     "url": "https://github.com/dreamit-de/graphql-prom-metrics/issues"
   },
   "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
-  "devDependencies": {
+  "devDependencies": {    
     "@dreamit/graphql-server": "4.2.6",
-    "@sgohlke/ts-base-dependencies": "1.0.19",
-    "jest-html-reporters": "3.1.4"
+    "@types/jest": "29.5.4",
+    "@types/node": "20.6.0",
+    "@typescript-eslint/eslint-plugin": "6.7.0",
+    "@typescript-eslint/parser": "6.7.0",
+    "eslint": "8.49.0",
+    "eslint-plugin-deprecation": "1.5.0",
+    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-modules-newline": "0.0.6",
+    "eslint-plugin-unicorn": "48.0.1",
+    "jest-html-reporters": "3.1.4",
+    "ts-jest": "29.1.1",
+    "typescript": "5.2.2"
   },
   "peerDependencies": {
     "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
