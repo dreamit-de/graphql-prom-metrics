@@ -1,10 +1,7 @@
 import {
-    createLogEntry,
     GraphQLServer,
     GraphQLServerOptions,
-    JsonLogger,
-    LogEntry,
-    LogEntryInput,
+    NoStacktraceJsonLogger,
 } from '@dreamit/graphql-server'
 import {
     FETCH_ERROR,
@@ -17,8 +14,6 @@ import {
     VALIDATION_ERROR,
     MetricsClient,
 } from '@dreamit/graphql-server-base'
-import {Console} from 'node:console'
-
 import {
     buildSchema,
     GraphQLError,
@@ -26,32 +21,6 @@ import {
     NoSchemaIntrospectionCustomRule
 } from 'graphql'
 import { PromMetricsClient } from '~/src'
-
-
-class NoStacktraceJsonLogger extends JsonLogger {
-    loggerConsole: Console = new Console(process.stdout, process.stderr, false)
-    logMessage(logEntryInput: LogEntryInput): void {
-        const {
-            logMessage,
-            loglevel,
-            error,
-            customErrorName,
-            context
-        } = logEntryInput
-
-        const logEntry: LogEntry = createLogEntry({
-            context,
-            customErrorName,
-            error,
-            logMessage,
-            loggerName: this.loggerName,
-            loglevel,
-            serviceName: this.serviceName,
-        })
-        logEntry.stacktrace = undefined
-        this.loggerConsole.log(JSON.stringify(logEntry))
-    }
-}
 
 const userSchema = buildSchema(`
   schema {
