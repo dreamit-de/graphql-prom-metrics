@@ -1,51 +1,52 @@
 {
-  "name": "@dreamit/graphql-prom-metrics",
-  "version": "1.2.6",
-  "description": "MetricsClient for @dreamit/graphql-server using prom-client library",
-  "main": "build/src/index.js",
-  "types": "build/src/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "check": "tsc --noEmit --pretty",
-    "lint": "eslint src/*.ts tests/*.ts",
-    "lintfix": "eslint --fix src/*.ts tests/*.ts",
-    "prepack": "npm run build",
-    "test": "jest --runInBand"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dreamit-de/graphql-prom-metrics.git"
-  },
-  "keywords": [
-    "GraphQL",
-    "server",
-    "Prometheus",
-    "prom-client"
-  ],
-  "author": "Stefan Gohlke",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dreamit-de/graphql-prom-metrics/issues"
-  },
-  "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
-  "devDependencies": {
-    "@dreamit/graphql-server": "4.5.0",
-    "@types/jest": "29.5.11",
-    "@types/node": "20.11.5",
-    "@typescript-eslint/eslint-plugin": "6.19.0",
-    "@typescript-eslint/parser": "6.19.0",
-    "eslint": "8.56.0",
-    "eslint-plugin-deprecation": "2.0.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-modules-newline": "0.0.6",
-    "eslint-plugin-security": "2.1.0",
-    "eslint-plugin-unicorn": "50.0.1",
-    "jest-html-reporters": "3.1.7",
-    "ts-jest": "29.1.1",
-    "typescript": "5.3.3"
-  },
-  "peerDependencies": {
-    "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
-    "prom-client": "^14.0.0 || ^15.0.0"
-  }
+    "name": "@dreamit/graphql-prom-metrics",
+    "version": "1.2.6",
+    "description": "MetricsClient for @dreamit/graphql-server using prom-client library",
+    "main": "build/src/index.js",
+    "types": "build/src/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "check": "tsc --noEmit --pretty",
+        "format": "prettier --cache --write .",
+        "lint": "eslint src/*.ts tests/*.ts",
+        "lintfix": "eslint --fix src/*.ts tests/*.ts",
+        "prepack": "npm run build",
+        "test": "jest --runInBand"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dreamit-de/graphql-prom-metrics.git"
+    },
+    "keywords": [
+        "GraphQL",
+        "server",
+        "Prometheus",
+        "prom-client"
+    ],
+    "author": "Stefan Gohlke",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/dreamit-de/graphql-prom-metrics/issues"
+    },
+    "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
+    "devDependencies": {
+        "@dreamit/graphql-server": "4.5.0",
+        "@types/jest": "29.5.11",
+        "@types/node": "20.11.5",
+        "@typescript-eslint/eslint-plugin": "6.19.0",
+        "@typescript-eslint/parser": "6.19.0",
+        "eslint": "8.56.0",
+        "eslint-plugin-deprecation": "2.0.0",
+        "eslint-plugin-import": "2.29.1",
+        "eslint-plugin-security": "2.1.0",
+        "eslint-plugin-unicorn": "50.0.1",
+        "jest-html-reporters": "3.1.7",
+        "prettier": "3.2.4",
+        "ts-jest": "29.1.1",
+        "typescript": "5.3.3"
+    },
+    "peerDependencies": {
+        "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
+        "prom-client": "^14.0.0 || ^15.0.0"
+    }
 }

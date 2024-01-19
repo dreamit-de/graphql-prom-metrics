@@ -1,8 +1,4 @@
-import prom,
-{
-    Counter,
-    Gauge
-} from 'prom-client'
+import prom, { Counter, Gauge } from 'prom-client'
 import {
     FETCH_ERROR,
     GRAPHQL_ERROR,
@@ -13,7 +9,7 @@ import {
     MISSING_QUERY_PARAMETER_ERROR,
     SCHEMA_VALIDATION_ERROR,
     SYNTAX_ERROR,
-    VALIDATION_ERROR
+    VALIDATION_ERROR,
 } from '@dreamit/graphql-server-base'
 
 /**
@@ -27,9 +23,11 @@ export class PromMetricsClient implements MetricsClient {
     requestThroughput!: Counter<string>
     graphQLServerErrorCounter!: Counter<string>
 
-    constructor(requestThroughputMetricName = 'graphql_server_request_throughput',
+    constructor(
+        requestThroughputMetricName = 'graphql_server_request_throughput',
         availabilityMetricName = 'graphql_server_availability',
-        errorsMetricName = 'graphql_server_errors') {
+        errorsMetricName = 'graphql_server_errors',
+    ) {
         this.requestThroughputMetricName = requestThroughputMetricName
         this.availabilityMetricName = availabilityMetricName
         this.errorsMetricName = errorsMetricName
@@ -80,10 +78,14 @@ export class PromMetricsClient implements MetricsClient {
         this.graphQLServerErrorCounter.labels(FETCH_ERROR).inc(0)
         this.graphQLServerErrorCounter.labels(METHOD_NOT_ALLOWED_ERROR).inc(0)
         this.graphQLServerErrorCounter.labels(INVALID_SCHEMA_ERROR).inc(0)
-        this.graphQLServerErrorCounter.labels(MISSING_QUERY_PARAMETER_ERROR).inc(0)
+        this.graphQLServerErrorCounter
+            .labels(MISSING_QUERY_PARAMETER_ERROR)
+            .inc(0)
         this.graphQLServerErrorCounter.labels(VALIDATION_ERROR).inc(0)
         this.graphQLServerErrorCounter.labels(SYNTAX_ERROR).inc(0)
-        this.graphQLServerErrorCounter.labels(INTROSPECTION_DISABLED_ERROR).inc(0)
+        this.graphQLServerErrorCounter
+            .labels(INTROSPECTION_DISABLED_ERROR)
+            .inc(0)
     }
 
     increaseErrors(label: string): void {
