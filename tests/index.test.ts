@@ -21,6 +21,7 @@ import {
     NoSchemaIntrospectionCustomRule,
 } from 'graphql'
 import { PromMetricsClient } from '~/src'
+import { expect, test } from 'vitest'
 
 const userSchema = buildSchema(`
   schema {
