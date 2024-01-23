@@ -5,6 +5,11 @@ export default defineConfig({
     plugins: [tsconfigPaths()],
     resolve: { alias: { graphql: 'graphql/index.js' } },
     test: {
+        coverage: {
+            exclude: ['build', 'tests'],
+            provider: 'v8',
+            reporter: ['text'],
+        },
         exclude: ['node_modules', 'build', '.idea', '.git', '.cache'],
     },
 })
