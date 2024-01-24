@@ -9,19 +9,19 @@ import {
     INVALID_SCHEMA_ERROR,
     METHOD_NOT_ALLOWED_ERROR,
     MISSING_QUERY_PARAMETER_ERROR,
+    MetricsClient,
     SCHEMA_VALIDATION_ERROR,
     SYNTAX_ERROR,
     VALIDATION_ERROR,
-    MetricsClient,
 } from '@dreamit/graphql-server-base'
 import {
-    buildSchema,
     GraphQLError,
     GraphQLSchema,
     NoSchemaIntrospectionCustomRule,
+    buildSchema,
 } from 'graphql'
-import { PromMetricsClient } from '~/src'
 import { expect, test } from 'vitest'
+import { PromMetricsClient } from '~/src'
 
 const userSchema = buildSchema(`
   schema {

@@ -1,16 +1,16 @@
-import prom, { Counter, Gauge } from 'prom-client'
 import {
     FETCH_ERROR,
     GRAPHQL_ERROR,
     INTROSPECTION_DISABLED_ERROR,
     INVALID_SCHEMA_ERROR,
     METHOD_NOT_ALLOWED_ERROR,
-    MetricsClient,
     MISSING_QUERY_PARAMETER_ERROR,
+    MetricsClient,
     SCHEMA_VALIDATION_ERROR,
     SYNTAX_ERROR,
     VALIDATION_ERROR,
 } from '@dreamit/graphql-server-base'
+import prom, { Counter, Gauge } from 'prom-client'
 
 /**
  * Metrics client using prom-client library, to collect metrics from application and GraphQL server.
