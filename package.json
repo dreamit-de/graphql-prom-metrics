@@ -42,10 +42,10 @@
     },
     "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
     "devDependencies": {
-        "@dreamit/graphql-server": "4.5.1",
+        "@dreamit/graphql-server": "4.6.0",
         "@types/node": "20.11.5",
-        "@typescript-eslint/eslint-plugin": "6.19.1",
-        "@typescript-eslint/parser": "6.19.1",
+        "@typescript-eslint/eslint-plugin": "6.20.0",
+        "@typescript-eslint/parser": "6.20.0",
         "@vitest/coverage-v8": "1.2.2",
         "eslint": "8.56.0",
         "eslint-plugin-deprecation": "2.0.0",
