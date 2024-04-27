@@ -9,6 +9,7 @@
         "format": "prettier --cache --write .",
         "lint": "eslint src/*.ts tests/*.ts",
         "lintfix": "eslint --fix src/*.ts tests/*.ts",
+        "mutationtest": "stryker run",
         "prepack": "npm run build",
         "test": "vitest run --coverage"
     },
@@ -43,6 +44,8 @@
     "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
     "devDependencies": {
         "@dreamit/graphql-server": "4.8.1",
+        "@sgohlke/stryker-log-ignorer": "file:sgohlke-stryker-log-ignorer-2.0.1.tgz",
+        "@stryker-mutator/vitest-runner": "8.2.6",
         "@types/node": "20.11.5",
         "@vitest/coverage-v8": "1.5.0",
         "eslint-plugin-deprecation": "2.0.0",

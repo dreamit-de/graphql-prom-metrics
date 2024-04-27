@@ -1,3 +1,4 @@
+import { JsonLogger } from '@dreamit/graphql-server'
 import {
     FETCH_ERROR,
     GRAPHQL_ERROR,
@@ -28,6 +29,8 @@ export class PromMetricsClient implements MetricsClient {
         availabilityMetricName = 'graphql_server_availability',
         errorsMetricName = 'graphql_server_errors',
     ) {
+        const logger = new JsonLogger('test-logger', 'test-service')
+        logger.info('DUMMY log entry: PromMetricsClient constructor')
         this.requestThroughputMetricName = requestThroughputMetricName
         this.availabilityMetricName = availabilityMetricName
         this.errorsMetricName = errorsMetricName
@@ -35,6 +38,7 @@ export class PromMetricsClient implements MetricsClient {
     }
 
     initMetrics(): void {
+        console.log('DUMMY log entry: initMetrics')
         prom.register.clear()
         prom.collectDefaultMetrics()
         this.createRequestThroughputCounter()

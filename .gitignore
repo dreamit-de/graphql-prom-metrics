@@ -5,3 +5,6 @@
 /coverage/
 /build/
 dreamit-graphql-prom-metrics*.*.tgz
+/reports/
+# stryker temp files
+.stryker-tmp
