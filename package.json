@@ -44,7 +44,7 @@
     "devDependencies": {
         "@dreamit/graphql-server": "4.11.1",
         "@types/node": "20.11.5",
-        "@vitest/coverage-v8": "2.1.4",
+        "@vitest/coverage-v8": "2.1.5",
         "eslint-plugin-deprecation": "3.0.0",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-security": "3.0.1",
@@ -55,7 +55,7 @@
         "typescript": "5.6.3",
         "typescript-eslint": "8.14.0",
         "vite-tsconfig-paths": "5.1.2",
-        "vitest": "2.1.4"
+        "vitest": "2.1.5"
     },
     "peerDependencies": {
         "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
