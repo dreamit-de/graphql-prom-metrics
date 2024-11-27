@@ -16,10 +16,10 @@ TypeScript declarations are provided within the project.
 
 ## Features
 
--   Provides out-of-the-box metrics for GraphQLServer
--   Provides 3 custom as well as NodeJS related metrics.
--   Uses only 2 peerDependencies: [@dreamit/graphql-server][1] version 3 and [prom-client][2] version 14 (no other production
-    dependencies)
+- Provides out-of-the-box metrics for GraphQLServer
+- Provides 3 custom as well as NodeJS related metrics.
+- Uses only 2 peerDependencies: [@dreamit/graphql-server][1] version 3 and [prom-client][2] version 14 (no other production
+  dependencies)
 
 ## Metrics
 
@@ -30,20 +30,20 @@ If you are using **PromMetricsClient** you should avoid creating multiple **Grap
 
 The **PromMetricsClient** provides three custom metrics for the GraphQL server:
 
--   **graphql_server_availability**: Availability gauge with status 0 (unavailable) and 1 (available)
--   **graphql_server_request_throughput**: The number of incoming requests
--   **graphql_server_errors**: The number of errors that are encountered while running the GraphQLServer. The counter uses
-    the _errorName_ field as label so errors could be differentiated. At the moment the following labels are available and
-    initialized with 0:
-    -   FetchError
-    -   GraphQLError
-    -   SchemaValidationError
-    -   MethodNotAllowedError
-    -   InvalidSchemaError
-    -   MissingQueryParameterError
-    -   ValidationError
-    -   SyntaxError
-    -   IntrospectionDisabledError
+- **graphql_server_availability**: Availability gauge with status 0 (unavailable) and 1 (available)
+- **graphql_server_request_throughput**: The number of incoming requests
+- **graphql_server_errors**: The number of errors that are encountered while running the GraphQLServer. The counter uses
+  the _errorName_ field as label so errors could be differentiated. At the moment the following labels are available and
+  initialized with 0:
+    - FetchError
+    - GraphQLError
+    - SchemaValidationError
+    - MethodNotAllowedError
+    - InvalidSchemaError
+    - MissingQueryParameterError
+    - ValidationError
+    - SyntaxError
+    - IntrospectionDisabledError
 
 A simple metrics endpoint can be created by using `getMetricsContentType` and `getMetrics` functions from
 the `GraphQLServer` instance. In the example below a second route is used to return metrics data.
