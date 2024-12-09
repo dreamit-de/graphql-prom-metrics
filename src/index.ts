@@ -45,23 +45,23 @@ export class PromMetricsClient implements MetricsClient {
 
     createServerErrorCounter(): void {
         this.graphQLServerErrorCounter = new prom.Counter({
-            name: this.errorsMetricName,
             help: 'Number of errors per Error class',
             labelNames: ['errorClass'],
+            name: this.errorsMetricName,
         })
     }
 
     createServerAvailabilityGauge(): void {
         this.graphQLServerAvailabilityGauge = new prom.Gauge({
-            name: this.availabilityMetricName,
             help: 'GraphQL server availability',
+            name: this.availabilityMetricName,
         })
     }
 
     createRequestThroughputCounter(): void {
         this.requestThroughput = new prom.Counter({
-            name: this.requestThroughputMetricName,
             help: 'Number of incoming requests',
+            name: this.requestThroughputMetricName,
         })
     }
 

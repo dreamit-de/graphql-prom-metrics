@@ -55,11 +55,11 @@ const userSchema = buildSchema(`
 `)
 
 const userSchemaResolvers = {
+    logout(): LogoutResult {
+        return { result: 'Goodbye!' }
+    },
     returnError(): User {
         throw new GraphQLError('Something went wrong!', {})
-    },
-    users(): User[] {
-        return [userOne, userTwo]
     },
     user(input: { id: string }): User {
         switch (input.id) {
@@ -77,8 +77,8 @@ const userSchemaResolvers = {
             }
         }
     },
-    logout(): LogoutResult {
-        return { result: 'Goodbye!' }
+    users(): User[] {
+        return [userOne, userTwo]
     },
 }
 
@@ -170,10 +170,10 @@ async function testInvalidSchemaMetrics(
     metricsClient: MetricsClient,
 ): Promise<void> {
     customGraphQLServer.setOptions({
-        schema: initialSchemaWithOnlyDescription,
-        rootValue: userSchemaResolvers,
         logger: LOGGER,
         metricsClient: metricsClient,
+        rootValue: userSchemaResolvers,
+        schema: initialSchemaWithOnlyDescription,
         shouldUpdateSchemaFunction: () => true,
     })
     metricsData = await getMetricsData()
@@ -292,12 +292,12 @@ async function testErrorResponseMetrics(): Promise<void> {
  */
 async function testEmptyContentResponseMetrics(): Promise<void> {
     await customGraphQLServer.handleRequest({
-        query: returnErrorQuery,
-        method: 'POST',
         headers: {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             'Content-Type': '',
         },
+        method: 'POST',
+        query: returnErrorQuery,
     })
 
     metricsData = await getMetricsData()
@@ -339,10 +339,6 @@ async function testFetchErrorResponseMetrics(
     metricsClient: MetricsClient,
 ): Promise<void> {
     customGraphQLServer.setOptions({
-        schema: userSchema,
-        rootValue: userSchemaResolvers,
-        logger: LOGGER,
-        metricsClient: metricsClient,
         executeFunction: () => {
             throw new GraphQLError(
                 'FetchError: ' +
@@ -350,6 +346,10 @@ async function testFetchErrorResponseMetrics(
                 {},
             )
         },
+        logger: LOGGER,
+        metricsClient: metricsClient,
+        rootValue: userSchemaResolvers,
+        schema: userSchema,
     })
 
     await customGraphQLServer.handleRequest({ query: usersQuery })
@@ -390,11 +390,11 @@ function getInitialGraphQLServerOptions(
     metricsClient: MetricsClient,
 ): GraphQLServerOptions {
     return {
-        schema: userSchema,
-        rootValue: userSchemaResolvers,
-        logger: LOGGER,
         customValidationRules: [NoSchemaIntrospectionCustomRule],
+        logger: LOGGER,
         metricsClient: metricsClient,
+        rootValue: userSchemaResolvers,
+        schema: userSchema,
     }
 }
 
