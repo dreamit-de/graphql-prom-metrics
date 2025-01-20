@@ -44,19 +44,19 @@
     "devDependencies": {
         "@dreamit/graphql-server": "4.12.2",
         "@types/node": "20.11.5",
-        "@vitest/coverage-v8": "3.0.1",
+        "@vitest/coverage-v8": "3.0.2",
         "eslint-plugin-deprecation": "3.0.0",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-security": "3.0.1",
         "eslint-plugin-unicorn": "56.0.1",
-        "oxlint": "0.15.6",
+        "oxlint": "0.15.7",
         "prettier": "3.4.2",
         "prettier-plugin-organize-imports": "4.1.0",
         "tsup": "8.3.5",
         "typescript": "5.7.3",
         "typescript-eslint": "8.20.0",
         "vite-tsconfig-paths": "5.1.4",
-        "vitest": "3.0.1"
+        "vitest": "3.0.2"
     },
     "peerDependencies": {
         "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
