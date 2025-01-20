@@ -15,72 +15,18 @@ import {
     VALIDATION_ERROR,
 } from '@dreamit/graphql-server-base'
 import {
+    returnErrorQuery,
+    userSchema,
+    userSchemaResolvers,
+    usersQuery,
+} from '@dreamit/graphql-testing'
+import {
     GraphQLError,
     GraphQLSchema,
     NoSchemaIntrospectionCustomRule,
-    buildSchema,
 } from 'graphql'
 import { expect, test } from 'vitest'
 import { PromMetricsClient } from '~/src'
-
-const userSchema = buildSchema(`
-  schema {
-    query: Query
-    mutation: Mutation
-  }
-  
-  type Query {
-    returnError: User 
-    users: [User]
-    user(id: String!): User
-  }
-  
-  type Mutation {
-    login(userName: String, password: String): LoginData
-    logout: LogoutResult
-  }
-  
-  type User {
-    userId: String
-    userName: String
-  }
-  
-  type LoginData {
-    jwt: String
-  }
-  
-  type LogoutResult {
-    result: String
-  }
-`)
-
-const userSchemaResolvers = {
-    logout(): LogoutResult {
-        return { result: 'Goodbye!' }
-    },
-    returnError(): User {
-        throw new GraphQLError('Something went wrong!', {})
-    },
-    user(input: { id: string }): User {
-        switch (input.id) {
-            case '1': {
-                return userOne
-            }
-            case '2': {
-                return userTwo
-            }
-            default: {
-                throw new GraphQLError(
-                    `User for userid=${input.id} was not found`,
-                    {},
-                )
-            }
-        }
-    },
-    users(): User[] {
-        return [userOne, userTwo]
-    },
-}
 
 const LOGGER = new NoStacktraceJsonLogger(
     'nostack-logger',
@@ -88,24 +34,9 @@ const LOGGER = new NoStacktraceJsonLogger(
     false,
 )
 
-interface User {
-    userId: string
-    userName: string
-}
-
-interface LogoutResult {
-    result: string
-}
-
 const initialSchemaWithOnlyDescription = new GraphQLSchema({
     description: 'initial',
 })
-
-const userOne: User = { userId: '1', userName: 'UserOne' }
-const userTwo: User = { userId: '2', userName: 'UserTwo' }
-
-const usersQuery = 'query users{ users { userId userName } }'
-const returnErrorQuery = 'query returnError{ returnError { userId } }'
 
 const metricsClient = new PromMetricsClient()
 const customGraphQLServer = new GraphQLServer(
