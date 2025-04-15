@@ -43,10 +43,10 @@
     "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
     "devDependencies": {
         "@dreamit/graphql-server": "4.13.3",
-        "@dreamit/graphql-testing": "0.1.2",
+        "@dreamit/graphql-testing": "0.2.0",
         "@types/node": "20.11.5",
         "@vitest/coverage-v8": "3.1.1",
-        "oxlint": "0.16.5",
+        "oxlint": "0.16.6",
         "prettier": "3.5.3",
         "prettier-plugin-organize-imports": "4.1.0",
         "tsup": "8.4.0",
