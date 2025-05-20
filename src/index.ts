@@ -5,12 +5,14 @@ import {
     INVALID_SCHEMA_ERROR,
     METHOD_NOT_ALLOWED_ERROR,
     MISSING_QUERY_PARAMETER_ERROR,
-    MetricsClient,
     SCHEMA_VALIDATION_ERROR,
     SYNTAX_ERROR,
     VALIDATION_ERROR,
 } from '@dreamit/graphql-server-base'
-import prom, { Counter, Gauge } from 'prom-client'
+// eslint-disable-next-line @typescript-eslint/no-duplicate-imports
+import type { MetricsClient } from '@dreamit/graphql-server-base'
+import type { Counter, Gauge } from 'prom-client'
+import prom from 'prom-client'
 
 /**
  * Metrics client using prom-client library, to collect metrics from application and GraphQL server.
