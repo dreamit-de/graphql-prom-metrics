@@ -11,8 +11,9 @@ import {
 } from '@dreamit/graphql-server-base'
 // eslint-disable-next-line @typescript-eslint/no-duplicate-imports
 import type { MetricsClient } from '@dreamit/graphql-server-base'
-import type { Counter, Gauge } from 'prom-client'
 import prom from 'prom-client'
+// eslint-disable-next-line @typescript-eslint/no-duplicate-imports
+import type { Counter, Gauge } from 'prom-client'
 
 /**
  * Metrics client using prom-client library, to collect metrics from application and GraphQL server.
