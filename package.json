@@ -42,17 +42,17 @@
     },
     "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
     "devDependencies": {
-        "@dreamit/graphql-server": "4.13.3",
-        "@dreamit/graphql-testing": "0.2.0",
+        "@dreamit/graphql-server": "5.0.1",
+        "@dreamit/graphql-testing": "1.0.1",
         "@types/node": "20.11.5",
-        "@vitest/coverage-v8": "3.1.3",
-        "oxlint": "0.16.9",
+        "@vitest/coverage-v8": "3.1.4",
+        "oxlint": "0.16.11",
         "prettier": "3.5.3",
         "prettier-plugin-organize-imports": "4.1.0",
-        "tsup": "8.4.0",
+        "tsup": "8.5.0",
         "typescript": "5.8.3",
         "vite-tsconfig-paths": "5.1.4",
-        "vitest": "3.1.3"
+        "vitest": "3.1.4"
     },
     "peerDependencies": {
         "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0",
