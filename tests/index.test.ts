@@ -1,19 +1,18 @@
-import {
-    GraphQLServer,
-    GraphQLServerOptions,
-    NoStacktraceJsonLogger,
-} from '@dreamit/graphql-server'
+import { GraphQLServer, NoStacktraceJsonLogger } from '@dreamit/graphql-server'
+// eslint-disable-next-line @typescript-eslint/no-duplicate-imports
+import type { GraphQLServerOptions } from '@dreamit/graphql-server'
 import {
     FETCH_ERROR,
     GRAPHQL_ERROR,
     INVALID_SCHEMA_ERROR,
     METHOD_NOT_ALLOWED_ERROR,
     MISSING_QUERY_PARAMETER_ERROR,
-    MetricsClient,
     SCHEMA_VALIDATION_ERROR,
     SYNTAX_ERROR,
     VALIDATION_ERROR,
 } from '@dreamit/graphql-server-base'
+// eslint-disable-next-line @typescript-eslint/no-duplicate-imports
+import type { MetricsClient } from '@dreamit/graphql-server-base'
 import {
     returnErrorQuery,
     userSchema,
@@ -319,7 +318,7 @@ async function testFetchErrorResponseMetrics(
 
 function getInitialGraphQLServerOptions(
     metricsClient: MetricsClient,
-): GraphQLServerOptions {
+): Partial<GraphQLServerOptions> {
     return {
         customValidationRules: [NoSchemaIntrospectionCustomRule],
         logger: LOGGER,
