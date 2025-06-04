@@ -46,14 +46,14 @@
         "@dreamit/graphql-testing": "1.0.1",
         "@swc/core": "1.11.29",
         "@types/node": "20.11.5",
-        "@vitest/coverage-v8": "3.2.0",
+        "@vitest/coverage-v8": "3.2.1",
         "oxlint": "0.17.0",
         "prettier": "3.5.3",
         "prettier-plugin-organize-imports": "4.1.0",
         "tsup": "8.5.0",
         "typescript": "5.8.3",
         "vite-tsconfig-paths": "5.1.4",
-        "vitest": "3.2.0"
+        "vitest": "3.2.1"
     },
     "peerDependencies": {
         "@dreamit/graphql-server-base": "^1.0.0 || ^2.0.0 || ^3.0.0",
