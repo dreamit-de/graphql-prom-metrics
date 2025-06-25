@@ -42,7 +42,7 @@
     },
     "homepage": "https://github.com/dreamit-de/graphql-prom-metrics#readme",
     "devDependencies": {
-        "@dreamit/graphql-server": "5.1.0",
+        "@dreamit/graphql-server": "5.1.1",
         "@dreamit/graphql-testing": "1.0.1",
         "@swc/core": "1.12.6",
         "@types/node": "20.11.5",
