@@ -2,6 +2,9 @@
 
 MetricsClient for @dreamit/graphql-server using prom-client library.
 
+**Deprecated:**
+This library will no longer be maintained. Use at your own risk!
+
 ## Installation
 
 ```sh
